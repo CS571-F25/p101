@@ -1,6 +1,6 @@
 
 
-function Achievements() {
+function Achievements(props) {
     return <div>Achievements Component</div>;
 }
 

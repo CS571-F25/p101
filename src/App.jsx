@@ -1,4 +1,4 @@
-import { StrictMode, useContext, createContext, useState } from 'react'
+import { StrictMode, useContext, createContext, useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import Home from './components/pages/Home'
@@ -12,10 +12,14 @@ import ProfileCompare from './components/pages/ProfileCompare'
 function App(){
 
 
-
+    const key = "";
     const [steamID, setSteamID] = useState("");
     const [validId, setValidId ] = useState(false);
-    const [ userData, setUserData ] = useState(null);
+    const [ userData, setUserData ] = useState({
+        ownedGames: null,
+        achievementData: null,
+        profileInfo: null
+    });
 
     function handleMainSearch(id) {
         // do some checks 
@@ -26,26 +30,77 @@ function App(){
 
         if(validateID(trimmedID)){
             console.log("ID is valid, fetching data...");
-            setUserData("Test Data");
-            //fetch from steam API
-            // setUserData(fetchedData);
+         
+            // if the steam id is valid, populate user data
+
+            fetch(`http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${key}&steamid=${id}&format=json`,{
+                method: 'GET',
+            })
+            .then(response => { return response.json() })
+            .then(data => {
+                console.log("Fetched owned games data: ", data);
+                setUserData((prevData) => ({
+                    ...prevData,
+                    ownedGames: data.response.games
+                }));
+            });
+
+            // // fetch achievement data for a specific game (example appid 440)
+            // let achievmentsObject = {};
+            // fetch(`http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=440&key=${key}&steamid=${id}`,{
+            //     method: 'GET',
+            // })
+            // .then(response => { return response.json() })
+            // .then(data => {
+            //     console.log("Fetched player achievements data: ", data);
+            //     setUserData((prevData) => ({
+            //         ...prevData,
+            //         achievementData: data.playerstats
+            //     }));
+            // });
+
+
         } else{
             console.log("ID is not valid.");
-            setUserData("No user data, Check if ID is valid or profile is public");
         }
-        // if it passes checks send a fetch via the api
-
     }
 
+  
+
     function validateID(id) {
+        
+        let valid = false;
+        // always assume invalid unless proven otherwise
+
         console.log("Validating ID: " + id);
         if (id.trim().length > 0) {
-            setValidId(true);
-            return true;
+
+            fetch(`http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${key}&steamids=${id}`,{
+                method: 'GET',
+            })
+            .then(response => {
+                
+                return response.json()
+            })
+            .then(data => {
+                if(data.response.players[0].communityvisibilitystate === 3){
+                    setValidId(true);
+                    valid = true;
+
+                    let profileInfo = data.response.players[0];
+                    setUserData((prevData) => ({
+                        ...prevData,
+                        profileInfo: profileInfo
+                    }));
+                } else {
+                    setValidId(false);                }
+            });
         } else {
             setValidId(false);
             return false;
         }
+
+        return valid;
 
     }
     

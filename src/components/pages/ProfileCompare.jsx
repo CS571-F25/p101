@@ -17,13 +17,13 @@ function ProfileCompare(props) {
         validId ?<>
     <Container>
         <h1>I am Profile Compare, {steamID}</h1> 
-        <p>Compare {userData} with another steam user by searching their Steam ID below</p>
+        <p>Compare {userData.profileInfo.personaName} with another steam user by searching their Steam ID below</p>
         <CompareSearch search={handleCompareSearch} />
     </Container>
     </> : <>
 
     <h1>No Valid Steam ID provided</h1>
-    <p>{userData}</p>
+    <p></p>
     </>
     );
 }

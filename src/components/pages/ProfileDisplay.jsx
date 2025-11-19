@@ -10,12 +10,12 @@ function ProfileDisplay(props) {
     return (
         validId ?<>
     <h1>I am Profile Display, {steamID}</h1> 
-    <p>{userData} and data is {userData}</p>
+    <p>{userData.profileInfo.response[0].personaName} and data is</p>
 
     </> : <>
 
     <h1>No Steam ID provided</h1>
-    <p>{userData}</p>
+    <p></p>
     </>
     );
 }

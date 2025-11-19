@@ -9,7 +9,7 @@ export default function Home(props) {
 
     <Container style={{marginTop: "20px", containerAlign: "center", textAlign: "center"}}>
 
-        <h1 id ="welcome-heading">Welcome to _ProjectName_</h1>
+        <h1 id ="welcome-heading">Welcome to Steam Profile Viewer and Achievement Tracker</h1>
 
         <Card style={{textAlign: "left", margin: "20px"}}>
           <Card.Body>
