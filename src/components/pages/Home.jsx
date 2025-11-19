@@ -1,16 +1,36 @@
-import TopNavBar from "../modules/TopNavBar";
+import TopNavBar from "../TopNavBar";
+import ProfileSearch from "./ProfileSearch";
+import { Card, Container } from "react-bootstrap";
 
-export default function Home() {
+export default function Home(props) {
 
 
     return <>
-        <TopNavBar />
-        
-        <h1>Welcome to _ProjectName_</h1>
 
-        <p> On the Profiles page, explore user profiles and compare their achievements against the global leaderboard for each game.</p>
-        <p>All users must be searched by a valid steam ID and have their profiles set to public, otherwise information will be unavailable.</p>
-        {/*TODO: using pictures show examples on how to use site and where it might break if profile is private*/}
-        {/*TODO: HashRouter*/}
+    <Container style={{marginTop: "20px", containerAlign: "center", textAlign: "center"}}>
+
+        <h1 id ="welcome-heading">Welcome to _ProjectName_</h1>
+
+        <Card style={{textAlign: "left", margin: "20px"}}>
+          <Card.Body>
+            <Card.Title>Profiles</Card.Title>
+            <Card.Text>
+              On the Profiles page, explore user profiles and compare their achievements against the global leaderboard for each game.
+              
+            </Card.Text>
+
+            <Card.Text>
+                All users must be searched by a valid steam ID and have their profiles set to public, otherwise information will be unavailable
+                {/*TODO: using pictures show examples on how to use site and where it might break if profile is private*/}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+       
+
+    </Container>
     </>
 }
+
+
+
+

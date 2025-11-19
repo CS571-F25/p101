@@ -1,10 +1,7 @@
-
-
 import { useContext, useState } from "react";
 import { FormControl, Button, InputGroup, Form } from "react-bootstrap";
-import SteamIDContext from "../../contexts/SteamIDContext";
 
-function ProfileSearch(props) {
+function CompareSearch(props) {
 
   const [inputID, setInputID] = useState("");
 
@@ -17,11 +14,11 @@ function ProfileSearch(props) {
           value={inputID}
           onChange={(e) => setInputID(e.target.value)}
         />
-        <Button variant="outline-secondary" id="primary-id-search-btn" onClick={() => props.search(inputID)}>
+        <Button variant="outline-secondary" id="primary-id-search-btn" onClick={() => console.log("Searching for ID: " + inputID)}>
           ⌕
         </Button>
       </InputGroup>
   );
 }
 
-export default ProfileSearch
+export default CompareSearch
