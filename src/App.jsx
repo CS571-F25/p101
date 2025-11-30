@@ -13,6 +13,7 @@ function App(){
 
 
     const key = "";
+
     const [steamID, setSteamID] = useState("");
     const [validId, setValidId ] = useState(false);
     const [ userData, setUserData ] = useState({
@@ -33,7 +34,7 @@ function App(){
          
             // if the steam id is valid, populate user data
 
-            fetch(`http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${key}&steamid=${id}&format=json`,{
+            fetch(`http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${key}&steamid=${id}&include_appinfo=1&format=json`,{
                 method: 'GET',
             })
             .then(response => { return response.json() })
@@ -45,7 +46,7 @@ function App(){
                 }));
             });
 
-            // // fetch achievement data for a specific game (example appid 440)
+            // fetch achievement data for a specific game (example appid 440)
             // let achievmentsObject = {};
             // fetch(`http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=440&key=${key}&steamid=${id}`,{
             //     method: 'GET',
@@ -69,8 +70,6 @@ function App(){
 
     function validateID(id) {
         
-        let valid = false;
-        // always assume invalid unless proven otherwise
 
         console.log("Validating ID: " + id);
         if (id.trim().length > 0) {
@@ -83,9 +82,9 @@ function App(){
                 return response.json()
             })
             .then(data => {
+                // players must have public profiles to be valid
                 if(data.response.players[0].communityvisibilitystate === 3){
                     setValidId(true);
-                    valid = true;
 
                     let profileInfo = data.response.players[0];
                     setUserData((prevData) => ({
@@ -93,14 +92,18 @@ function App(){
                         profileInfo: profileInfo
                     }));
                 } else {
-                    setValidId(false);                }
+                    console.log("Profile is not public.");
+                    setValidId(false);
+                    return false;
+                }
             });
         } else {
+            console.log("ID is empty.");
             setValidId(false);
             return false;
         }
 
-        return valid;
+        return true;
 
     }
     
