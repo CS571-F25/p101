@@ -66,9 +66,11 @@ function ProfileDisplay(props) {
         </Card>
         </Container>
     </> : <>
-
-    <h1>No Steam ID provided</h1>
-    <p></p>
+        <Container style={{marginTop: "10%", containerAlign: "center", textAlign: "center"}}>
+            <Card>
+                <h1>Please Enter a Valid Steam ID to Get Started</h1>
+            </Card>
+        </Container>
     </>
     );
 }

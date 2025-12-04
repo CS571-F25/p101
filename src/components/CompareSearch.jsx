@@ -14,7 +14,7 @@ function CompareSearch(props) {
           value={inputID}
           onChange={(e) => setInputID(e.target.value)}
         />
-        <Button variant="outline-secondary" id="primary-id-search-btn" onClick={() => console.log("Searching for ID: " + inputID)}>
+        <Button variant="outline-secondary" id="primary-id-search-btn" onClick={() => props.search(inputID)}>
           ⌕
         </Button>
       </InputGroup>
