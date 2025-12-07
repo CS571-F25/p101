@@ -1,7 +1,9 @@
-import { Card, Container, Image, Button } from 'react-bootstrap';
+import { Card, Container, Image, Button, Col } from 'react-bootstrap';
 import { use, useEffect, useState, useContext } from 'react';
 import SteamIDContext from "../contexts/SteamIDContext";
 import StatsDisplay from './StatsDisplay';
+import { Color, useColor } from "color-thief-react";
+import GameCardHeader from './GameCardHeader';
 
 
 function GameCard(props) {
@@ -19,6 +21,7 @@ function GameCard(props) {
     const [notAchieved, setNotAchieved] = useState([]);
     const [globalData, setGlobalData] = useState([]);
 
+    const proxiedURL = `https://corsproxy.io/?${encodeURIComponent(imageURL)}`;
 
     async function onExpand(){
         console.log("im being clicked");
@@ -44,9 +47,6 @@ function GameCard(props) {
         }
 
         setExpanded(prev => !prev);
-        // console.log("achievements: ", achievements);
-        // console.log("achieved: ", achieved);
-        // console.log("notAchieved: ", notAchieved);
 
     }
 
@@ -59,14 +59,18 @@ function GameCard(props) {
         setExpanded(false);
     }, [steamID]);
 
-    return(<>
-        <Card style={{ margin: "2%", cursor: "pointer"}} onClick={onExpand}>
-        <Container style={{margin: "2%", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", padding: "0"}}>
-            
-            
-            <Image src={imageURL} rounded />
+    const { data, loading, error } = useColor(proxiedURL, 'hex', { crossOrigin: "anonymous", quality: 10 });
+    const bgColor = data ? data : "#ffffff";
 
-            <p>{props.name}</p>
+    return(<>
+        
+        <Card style={{ margin: "2%", cursor: "pointer", backgroundColor: bgColor}} onClick={onExpand} >
+            {/* <Color src={proxiedURL}  getColors={colors => {setBgColor(colors[0])}}>
+                <img src={proxiedURL} crossOrigin="anonymous" style={{display: "none"}} />
+            </Color> */}
+        <Container style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", padding: "0"}}>
+            
+            <GameCardHeader image={imageURL} title={props.name} color={bgColor} />
 
         </Container>
 

@@ -1,15 +1,19 @@
 
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, use } from "react";
 import SteamIDContext from "../../contexts/SteamIDContext";
-import { Container, Card } from "react-bootstrap";
+import { Container, Card, Button } from "react-bootstrap";
 import CompareSearch from "../CompareSearch";
 import CompareGameCard from "../CompareGameCard";
 
 function ProfileCompare(props) {
 
+    const key = ""
+
     const [steamID, setSteamId, validId, userData] = useContext(SteamIDContext);
     const [comparedID, setComparedID] = useState("");
     const [validComparedId, setValidComparedId ] = useState(false);
+
+    // second user
     const [comparedData, setComparedData] = useState({
         ownedGames: null,
         achievementData: null,
@@ -35,18 +39,14 @@ function ProfileCompare(props) {
         setDisplayedGames(commonGames.slice(0, numLoadedGames));
     }, [numLoadedGames, commonGames]);
 
+    useEffect(() => {
+        // reset displayed games and common games when comparedID changes
+    }, [comparedID]);
+
     function loadMoreGames(){
         setNumLoadedGames(prev => prev + 10);
     }
 
-    /*
-    plans for this page:
-    enter a secondary steam ID to compare with primary
-     - for a list of games that both own, display cards like in ProfileDisplay
-        - show list of achievements that both players have, highlighting the rarest
-        - dont display achievements that they dont have
-
-    */
 
     function handleComparedSearch(id) {
         // do some checks 
@@ -77,7 +77,6 @@ function ProfileCompare(props) {
         }
     }
 
-  
 
     function validateComparedID(id) {
         
@@ -117,27 +116,37 @@ function ProfileCompare(props) {
 
     }
 
+
+    console.log("comparedData, secondaryUser: ", comparedData);
     return (
         validId ? <>
         <Container>
         <Card style={{marginTop: "5%", contentAlign:"center"}}>
             <h1 style={{textAlign: "center"}}>Primary Steam user, {userData.profileInfo.personaname}</h1> 
-            <p>Compare {userData.profileInfo.personaname} with another steam user by searching their Steam ID below</p>
-            <CompareSearch search={handleComparedSearch} />
 
+            <Container style={{display: "flex", justifyContent: "center", alignItems: "center", padding: "0", flexDirection: "column", textAlign: "center"}}>
+                <p>Compare {userData.profileInfo.personaname} with another steam user by searching their Steam ID below</p>
+                <CompareSearch search={handleComparedSearch} />
+            </Container>
 
             {/*if both steam IDs are valid */}
             { validComparedId ? <>
-            <Container>
-                <h2>Comparing with {comparedData.profileInfo.personaname}</h2>
-
+            <Container style={{justifyContent: "center", alignItems: "center", padding: "0"}}>
+                <Container style={{flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "0", textAlign: "center"}}>
+                    <h2>Comparing with {comparedData.profileInfo.personaname}</h2>
+                    <Container  style={{display: "flex", gap: "2%", marginBottom: "4%", flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: "4%"}}>
+                        <img src={comparedData.profileInfo.avatarfull} alt="Secondary User Avatar" />
+                        <p> vs </p>
+                        <img src={userData.profileInfo.avatarfull} alt="Primary User Avatar" />
+                    </Container>
+                </Container>
                 {
                     displayedGames.map((game, index) => {
                         return <CompareGameCard key={game.appid} 
                         appid={game.appid} 
                         name={game.name} 
                         img_icon_url={game.img_icon_url} 
-                        compareID={comparedID} />
+                        secondaryUser = {comparedData} />
                     })
                 }
 
@@ -146,7 +155,7 @@ function ProfileCompare(props) {
             
             {/* end display of compared user info */}
 
-            </>: <p>No valid Steam ID to compare.</p>
+            </>: <p style={{ textAlign: "center"}}> No Valid Second Steam Entered.</p>
             }
         </Card>
         </Container>

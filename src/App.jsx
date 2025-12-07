@@ -46,21 +46,6 @@ function App(){
                 }));
             });
 
-            // fetch achievement data for a specific game (example appid 440)
-            // let achievmentsObject = {};
-            // fetch(`http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=440&key=${key}&steamid=${id}`,{
-            //     method: 'GET',
-            // })
-            // .then(response => { return response.json() })
-            // .then(data => {
-            //     console.log("Fetched player achievements data: ", data);
-            //     setUserData((prevData) => ({
-            //         ...prevData,
-            //         achievementData: data.playerstats
-            //     }));
-            // });
-
-
         } else{
             console.log("ID is not valid.");
         }

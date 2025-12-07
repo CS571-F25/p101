@@ -52,7 +52,6 @@ function ProfileDisplay(props) {
             </Container>
 
             <h1 style={{textAlign: "center"}}>Displaying profile information for {userData.profileInfo.personaname}</h1> 
-            <p>{userData.profileInfo.personaName} and data is</p>
 
             {
                 displayedGames.map((game, index) => {
